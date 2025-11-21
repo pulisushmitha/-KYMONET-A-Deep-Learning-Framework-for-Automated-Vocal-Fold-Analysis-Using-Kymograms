@@ -91,7 +91,7 @@ To prepare the dataset for training:
 -**15% Testing**
 Validation and test sets remained **unbalanced** to reflect real-world conditions.
 
-**Training Oversampling:**
+**6. Training Oversampling:**
 
 Class imbalance (especially for organic and functional conditions) was addressed using **Random Oversampling only on the training set.**
 This ensured:
@@ -102,3 +102,111 @@ Final counts:
 -**Tertiary classification:** 4,633 images per class
 
 This resulted in a robust and well-structured training dataset.
+**7. Model Training and Architecture Comparison**
+- Multiple deep learning architectures were implemented:
+  - **InceptionV3**
+  - **DenseNet121**
+  - **ResNet50V2**
+  - **AlexNet**
+  - **ConvNeXt V2**
+- All models were trained on **preprocessed, segmented, augmented, and balanced kymogram datasets**.
+- Each architecture was configured specifically for:
+  - **Binary classification:** Healthy vs Unhealthy
+  - **Tertiary classification:** Healthy, Functional, Organic
+- All models were trained for **30 epochs** with optimized hyperparameters and regularization techniques.
+
+  
+## DenseNet121 – Training Pipeline
+- Input images resized to **224×224 px** for uniformity.
+- Batch size **32** to optimize GPU utilization.
+- DenseNet121 pretrained on **ImageNet**, used as a **frozen feature extractor**.
+- Output of backbone → **Flatten layer** → 1D vector.
+- Fully connected classifier:
+  - Dense (512 units, ReLU)
+  - Dense (256 units, ReLU)
+  - Batch Normalization
+  - Dropout
+  - Final Dense → **1 or 3 output units** (binary/tertiary)
+- Final activation: **Sigmoid** (binary) or **Softmax** (tertiary).
+- Achieves efficient feature extraction + strong generalization.
+
+---
+
+## AlexNet (with ResNet-152 Feature Extractor)
+- ResNet-152 used as **fixed feature extractor** (last layer removed).
+- Extracts **2048-dimensional** deep features.
+- Custom AlexNet-style classifier:
+  - Two Dense layers → **4096 units** each (ReLU)
+  - Dropout **0.5** for regularization
+  - Output layer with **2 or 3 units**
+- Trained for **30 epochs** using **Adam optimizer** + cross-entropy loss.
+- Demonstrated high accuracy and strong generalization.
+
+---
+
+## EfficientNetV2
+- Inputs resized to **224×224** with horizontal flip augmentation.
+- Applied **Exponential Moving Average (EMA)** to smooth model weights.
+- Architecture includes:
+  - Stem convolution (3×3, 32 filters)
+  - 5 MBConv blocks with progressive scaling:
+    - Filters: 32 → 64 → 128 → 256 → 512
+  - GELU activation throughout
+  - Final 1280-filter Conv layer → BatchNorm → GELU
+  - Classification head → **Softmax**
+- Trained for 30 epochs with:
+  - Adam optimizer (lr=1e-4)
+  - Cross-entropy loss
+  - Best-weights checkpointing
+- ~22 million parameters, highly efficient and scalable.
+
+---
+
+## ResNet50V2 (with ResNet-152 Features + MLP)
+- ResNet-152 backbone extracts **2048-D deep features**.
+- Custom residual classifier includes:
+  - Two FC layers per block
+  - BatchNorm + ReLU
+  - Skip connections (ResNet-style)
+  - Dropout (0.3)
+- Final Dense layer outputs **2 or 3 units**.
+- Trained for 30 epochs using Adam (lr=1e-4) + cross-entropy loss.
+- Residual MLP improves gradient flow & reduces overfitting.
+
+---
+
+## ConvNeXt V2 Hybrid Model
+- Backbone: **ResNet-152 (frozen)**.
+- Classifier: ConvNeXt V2-inspired MLP head:
+  - LayerNorm
+  - Dense (1024 units, GELU)
+  - Dense (512 units, GELU)
+  - Dropout (0.3)
+- Optimizer: **AdamW** (lr=1e-4, weight decay=1e-4).
+- Learning rate scheduler: **ReduceLROnPlateau**.
+- Effective for both binary & tertiary tasks.
+
+---
+
+## InceptionV3 (Best Model)
+- Input resized to **299×299**.
+- Applied data augmentation:
+  - Color jitter
+  - Random horizontal flip
+  - Small rotations
+- Inception modules extract multi-scale features:
+  - Parallel 1×1, 3×3, 5×5 convolutions
+- Includes **auxiliary classifiers** to stabilize deep gradients.
+- Feature maps passed through **Global Average Pooling (GAP)** → Linear → Output.
+- Final layer adapted for **2-class or 3-class** prediction.
+- Trained using **Adam optimizer (1e-4)** + weighted cross-entropy.
+- Achieved **best accuracy in both binary and tertiary classification**.
+
+---
+
+## Summary of Training Insights
+- All models were trained independently for binary and tertiary classification.
+- InceptionV3 and ResNet50V2 consistently produced **highest accuracy + best AUC scores**.
+- DenseNet121, EfficientNetV2, AlexNet, and ConvNeXtV2 also showed high performance.
+- Custom 2D-CNN (baseline) achieved strong tertiary results without transfer learning.
+
