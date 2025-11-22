@@ -10,11 +10,11 @@ Each recording captures the rapid vibration of the vocal folds at thousands of f
 
 The dataset includes metadata specifying the type of disorder, allowing the classification structure to be split into:
 
--**Healthy**
+- **Healthy**
 
--**Functional disorders** (e.g., muscle tension dysphonia)
+- **Functional disorders** (e.g., muscle tension dysphonia)
 
--**Organic disorders** (e.g., nodules, cysts, edema, paralysis)
+- **Organic disorders** (e.g., nodules, cysts, edema, paralysis)
 
 A detailed breakdown of disorder categories is provided in Table 1 of the report. 
 
@@ -49,9 +49,9 @@ To correct this, two enhancement methods were used:
 
 RIFE is a deep learning–based frame interpolation model that generates intermediate frames between existing ones.
 Benefits:
--Smoothens transitions
--Reduces motion artifacts
--Produces clearer vibratory sequences
+- Smoothens transitions
+- Reduces motion artifacts
+- Produces clearer vibratory sequences
 
 After RIFE enhancement, videos were more stable and resulted in improved kymograms. However, only **5 out of 29 videos** were successfully stabilized; the remaining suffered from extreme noise and were discarded based on clinical research practices. 
 
@@ -63,12 +63,12 @@ Videos were slowed down to **0.2× speed** using FFmpeg to increase temporal res
 Original kymograms varied in height (number of frames). To convert them into meaningful input samples:
 
 **Segmentation Procedure:**
--Each kymogram was split into smaller 58 × 121 pixel slices.
--The slicing covered the full height of the kymogram, producing multiple segment images per sample.
--Each segment was given a sequential filename.
+- Each kymogram was split into smaller 58 × 121 pixel slices.
+- The slicing covered the full height of the kymogram, producing multiple segment images per sample.
+- Each segment was given a sequential filename.
 
 **Rotation Augmentation:**
--Each segment was rotated 90° clockwise, effectively converting the time-axis orientation and generating more samples.
+- Each segment was rotated 90° clockwise, effectively converting the time-axis orientation and generating more samples.
 This significantly expanded the dataset:
 Class	Original Count	After Segmentation & Rotation
 | Class       | Original Count | After Segmentation & Augmentation |
@@ -86,20 +86,20 @@ This drastically improved model generalization and reduced overfitting.
 To prepare the dataset for training:
 
 **Splitting:**
--**70% Training**
--**15% Validation**
--**15% Testing**
+- **70% Training**
+- **15% Validation**
+- **15% Testing**
 Validation and test sets remained **unbalanced** to reflect real-world conditions.
 
 ## **6. Training Oversampling:**
 
 Class imbalance (especially for organic and functional conditions) was addressed using **Random Oversampling only on the training set.**
 This ensured:
--Equal number of samples for each class
--Fair learning and improved classifier stability
+- Equal number of samples for each class
+- Fair learning and improved classifier stability
 Final counts:
--**Binary classification:** 4,353 images per class
--**Tertiary classification:** 4,633 images per class
+- **Binary classification:** 4,353 images per class
+- **Tertiary classification:** 4,633 images per class
 
 This resulted in a robust and well-structured training dataset.
 ## **7. Model Training and Architecture Comparison**
