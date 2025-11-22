@@ -71,6 +71,7 @@ Original kymograms varied in height (number of frames). To convert them into mea
 - Each segment was rotated 90° clockwise, effectively converting the time-axis orientation and generating more samples.
 This significantly expanded the dataset:
 Class	Original Count	After Segmentation & Rotation
+
 | Class       | Original Count | After Segmentation & Augmentation |
 |-------------|----------------|-----------------------------------|
 | Healthy     | 356            | 6,219                             |
