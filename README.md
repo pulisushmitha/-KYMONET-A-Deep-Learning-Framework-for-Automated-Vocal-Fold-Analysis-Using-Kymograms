@@ -1,4 +1,4 @@
-# -KYMONET-A-Deep-Learning-Framework-for-Automated-Vocal-Fold-Analysis-Using-Kymograms
+# KYMONET-A-Deep-Learning-Framework-for-Automated-Vocal-Fold-Analysis-Using-Kymograms
 Generated kymograms using MATLAB, preprocessed vocal fold videos with RIFE and FFmpeg, and built deep learning models for ternary classification. Achieved 98% accuracy through oversampling, hyperparameter tuning, and thorough metric-based evaluation.
 # 1. Data Acquisition
 
@@ -32,14 +32,14 @@ A **kymogram** is a 2D visualization that compresses an entire video into a sing
 
 **4**. From every frame in the video:
 
-   -A **horizontal scanline** is extracted across the glottis.
-   -This line is placed as one row in the output kymogram.
+   - A **horizontal scanline** is extracted across the glottis.
+   - This line is placed as one row in the output kymogram.
 
 **5**. The resulting image is contrast-enhanced and saved as a .png.
 
 This process was executed for all available videos, and high-quality kymograms were generated for 590+ samples. 
 
-#3. Video Enhancement using RIFE and FFmpeg
+## 3. Video Enhancement using RIFE and FFmpeg
 
 Some HSV videos (29 samples) originally produced **noisy or blurred kymograms** due to issues such as motion blur, excessive brightness, or low frame uniformity.
 
