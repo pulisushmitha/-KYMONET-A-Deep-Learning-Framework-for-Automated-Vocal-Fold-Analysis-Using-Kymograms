@@ -19,7 +19,7 @@ The dataset includes metadata specifying the type of disorder, allowing the clas
 A detailed breakdown of disorder categories is provided in Table 1 of the report. 
 
 
-#**2. Kymogram Generation Using MATLAB**
+## **2. Kymogram Generation Using MATLAB**
 A **kymogram** is a 2D visualization that compresses an entire video into a single vertical stack of pixel rows, representing vocal fold vibration over time. It is widely used for detecting asymmetry, irregular closures, and abnormal vibratory cycles.
 
 **Kymogram Generation Pipeline:**
@@ -45,7 +45,7 @@ Some HSV videos (29 samples) originally produced **noisy or blurred kymograms** 
 
 To correct this, two enhancement methods were used:
 
-#**3.1 RIFE (Real-Time Intermediate Flow Estimation)**
+## **3.1 RIFE (Real-Time Intermediate Flow Estimation)**
 
 RIFE is a deep learning–based frame interpolation model that generates intermediate frames between existing ones.
 Benefits:
@@ -55,11 +55,11 @@ Benefits:
 
 After RIFE enhancement, videos were more stable and resulted in improved kymograms. However, only **5 out of 29 videos** were successfully stabilized; the remaining suffered from extreme noise and were discarded based on clinical research practices. 
 
-#**3.2 FFmpeg Slow-Motion Processing**
+## **3.2 FFmpeg Slow-Motion Processing**
 
 Videos were slowed down to **0.2× speed** using FFmpeg to increase temporal resolution and allow more accurate scanline extraction. This preprocessing helped reduce inconsistencies caused by rapid oscillations of vocal folds. 
 
-**4. Kymogram Segmentation and Augmentation**
+## **4. Kymogram Segmentation and Augmentation**
 Original kymograms varied in height (number of frames). To convert them into meaningful input samples:
 
 **Segmentation Procedure:**
@@ -81,7 +81,7 @@ Class	Original Count	After Segmentation & Rotation
 Total dataset size after augmentation: **9,896 images.**
 This drastically improved model generalization and reduced overfitting. 
 
-#**5. Dataset Splitting and Class Balancing**
+## **5. Dataset Splitting and Class Balancing**
 
 To prepare the dataset for training:
 
@@ -91,7 +91,7 @@ To prepare the dataset for training:
 -**15% Testing**
 Validation and test sets remained **unbalanced** to reflect real-world conditions.
 
-#**6. Training Oversampling:**
+## **6. Training Oversampling:**
 
 Class imbalance (especially for organic and functional conditions) was addressed using **Random Oversampling only on the training set.**
 This ensured:
@@ -102,7 +102,7 @@ Final counts:
 -**Tertiary classification:** 4,633 images per class
 
 This resulted in a robust and well-structured training dataset.
-#**7. Model Training and Architecture Comparison**
+## **7. Model Training and Architecture Comparison**
 - Multiple deep learning architectures were implemented:
   - **InceptionV3**
   - **DenseNet121**
